@@ -4,11 +4,13 @@ import {
 	signInWithPopup,
 	GoogleAuthProvider,
 	createUserWithEmailAndPassword,
-	signInWithEmailAndPassword
+	signInWithEmailAndPassword,
+	signOut,
+	onAuthStateChanged
 } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
-// Your web app's Firebase configuration
+// App's Firebase configuration
 const firebaseConfig = {
 	apiKey: "AIzaSyDdczNvv4eXAR2idmT4yxxfAk6W6JxI8W4",
 	authDomain: "crown-clothing-db-a3084.firebaseapp.com",
@@ -32,14 +34,17 @@ export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 
 export const db = getFirestore();
 
-export const createUserDocumentFromAuth = async (userAuth, AdditionalInformation={}) => {
+export const createUserDocumentFromAuth = async (
+	userAuth,
+	AdditionalInformation = {}
+) => {
 	if (!userAuth) return;
 
 	const userDocRef = doc(db, "users", userAuth.uid);
 	const userSnapshot = await getDoc(userDocRef);
 
 	// if user data does not exist
-	// create/set the document with the data from userauth in my coolection
+	// create/set the document with the data from userauth in my collection
 	// check if user data exists
 	// return userdockRef
 
@@ -61,7 +66,7 @@ export const createUserDocumentFromAuth = async (userAuth, AdditionalInformation
 	return userDocRef;
 };
 
-// create user
+// create user - helper function
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
 	if (!email || !password) return;
 
@@ -74,3 +79,9 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
 
 	return await signInWithEmailAndPassword(auth, email, password);
 };
+
+// sign in user
+export const signOutUser = async () => await signOut(auth);
+
+export const onAuthStateChangedListener = callback =>
+	onAuthStateChanged(auth, callback);
