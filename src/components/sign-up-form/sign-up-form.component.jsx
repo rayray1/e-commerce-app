@@ -8,7 +8,7 @@ import {
 	createUserDocumentFromAuth
 } from "../../utils/firebase/firebase.utils";
 
-import "./sign-up-form.style.scss";
+import { SignUpContainer } from "./sign-up-form.style"
 
 const defaultFormFields = {
 	displayName: "",
@@ -29,7 +29,7 @@ const SignUpForm = () => {
 		event.preventDefault();
 
 		if (password !== confirmPassword) {
-			alert("password do not match");
+			alert("passwords do not match");
 			return;
 		}
 
@@ -38,11 +38,12 @@ const SignUpForm = () => {
 				email,
 				password
 			);
+
 			await createUserDocumentFromAuth(user, { displayName });
 			resetFormFields();
 		} catch (error) {
 			if (error.code === "auth/email-already-in-use") {
-				alert("cannot create user, email already in use");
+				alert("Cannot create user, email already in use");
 			} else {
 				console.log("user creation encountered an error", error);
 			}
@@ -56,9 +57,9 @@ const SignUpForm = () => {
 	};
 
 	return (
-		<div className='sign-up-container'>
-			<h2>Dont have an account?</h2>
-			<span className='class'>Sign up with your email and password</span>
+		<SignUpContainer>
+			<h2>Don't have an account?</h2>
+			<span>Sign up with your email and password</span>
 			<form onSubmit={handleSubmit}>
 				<FormInput
 					label='Display Name'
@@ -95,9 +96,9 @@ const SignUpForm = () => {
 					name='confirmPassword'
 					value={confirmPassword}
 				/>
-				<Button type='inverted'>Submit</Button>
+				<Button type='submit'>Sign Up</Button>
 			</form>
-		</div>
+		</SignUpContainer>
 	);
 };
 
